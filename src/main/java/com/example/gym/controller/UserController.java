@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
@@ -20,10 +21,12 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user){
         User userDb=userService.getUserByUsername(user.getUsername());
+        if(userDb!= null)
         if(userDb.getPassword().equals(user.getPassword())){
             return ResponseEntity.ok(userDb);
         }
         else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(user);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(user);
     }
 
     @PostMapping("/register")
